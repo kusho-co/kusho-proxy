@@ -1,12 +1,71 @@
-# kusho-ai-proxy
-Local proxy server for routing API calls made during test execution on KuahoAI webapp. This is an alternative to KushoAI Chrome extension for proxying API calls in case the extension is blocked by your infra or you're using a non-chromium browser. 
+# kusho-proxy
 
-This is a node application, so you need to have node 18 or above installed.
+Local proxy server for routing API calls made during test execution on KushoAI webapp. This is an alternative to KushoAI Chrome extension for proxying API calls in case the extension is blocked by your infrastructure or you're using a non-chromium browser.
 
-// TODO: Instructions about installing node using nvm
+## Prerequisites
 
-// TODO: How to run the proxy server
+This is a Node.js application that requires Node.js 20 or above.
 
-Dockerized version of this proxy is coming soon. You can deploy the dockerized proxy on your infra and route all request via this deployed proxy if you don't want every person in the team to setup a separate proxy.
+## Installation
 
-NOTE: This proxy works only with individual test suite level API calls. We'll soon port this to E2E tests as well. 
+### Install Node.js using NVM (Recommended)
+
+1. **Install NVM (Node Version Manager)**
+   
+   For macOS/Linux:
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+   ```
+   
+   For Windows, use [nvm-windows](https://github.com/coreybutler/nvm-windows):
+   - Download and install the latest release from the GitHub repository
+
+2. **Restart your terminal or run:**
+   ```bash
+   source ~/.bashrc
+   ```
+
+3. **Install Node.js 20:**
+   ```bash
+   nvm install 20
+   nvm use 20
+   ```
+
+4. **Verify installation:**
+   ```bash
+   node --version
+   npm --version
+   ```
+
+### Setup the Proxy Server
+
+1. **Clone this repository:**
+   ```bash
+   git clone <repository-url>
+   cd kusho-proxy
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the proxy server:**
+   ```bash
+   node proxy.js
+   ```
+
+The proxy server will start running and be ready to handle API calls from the KushoAI webapp.
+
+## Usage
+
+Once the proxy server is running, configure your KushoAI webapp to route API calls through this local proxy instead of using the Chrome extension.
+
+## Coming Soon
+
+- **Dockerized version**: Deploy the dockerized proxy on your infrastructure and route all requests via this deployed proxy if you don't want every person in the team to setup a separate proxy.
+- **E2E test support**: Currently, this proxy works only with individual test suite level API calls. We'll soon port this to E2E tests as well.
+
+## Support
+
+If you encounter any issues or have questions, please refer to the KushoAI documentation or contact support.

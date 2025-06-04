@@ -41,7 +41,7 @@ This is a Node.js application that requires Node.js 20 or above.
 
 1. **Clone this repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/kusho-co/kusho-proxy.git
    cd kusho-proxy
    ```
 

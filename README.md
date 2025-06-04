@@ -22,7 +22,7 @@ This is a Node.js application that requires Node.js 20 or above.
 
 2. **Restart your terminal or run:**
    ```bash
-   source ~/.bashrc
+   source ~/.bashrc  # or ~/.bash_profile in some terminals
    ```
 
 3. **Install Node.js 20:**

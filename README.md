@@ -64,8 +64,7 @@ Once the proxy server is running, configure your KushoAI webapp to route API cal
 ## Coming Soon
 
 - **Dockerized version**: Deploy the dockerized proxy on your infrastructure and route all requests via this deployed proxy if you don't want every person in the team to setup a separate proxy.
-- **E2E test support**: Currently, this proxy works only with individual test suite level API calls. We'll soon port this to E2E tests as well.
 
 ## Support
 
-If you encounter any issues or have questions, please refer to the KushoAI documentation or contact support.
+If you encounter any issues or have questions, please reach out to us at support@kusho.ai

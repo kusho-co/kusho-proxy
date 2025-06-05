@@ -67,12 +67,12 @@ app.post('/proxy', async (req, res) => {
 
         // Respond with the target server's response
         res.status(200).send({
-          response: response.data,
-          headers: response.headers,
-          statusCode: response.status,
-          error: response.error,
-          elapsedTime: response.elapsedTime,
-          responseSize: response.responseSize,
+          response: response?.data,
+          headers: response?.headers,
+          statusCode: response?.status,
+          error: response?.error,
+          elapsedTime: response?.elapsedTime,
+          responseSize: response?.responseSize,
           testCaseId: testCaseId,
           idempotent_key: idempotent_key,
           run_type: run_type,
@@ -82,12 +82,12 @@ app.post('/proxy', async (req, res) => {
         // Respond with the target server's response
         const response = error.response;
         res.status(200).send({
-          response: response.data,
-          headers: response.headers,
-          statusCode: response.status,
-          error: response.error,
-          elapsedTime: response.elapsedTime,
-          responseSize: response.responseSize,
+          response: response?.data,
+          headers: response?.headers,
+          statusCode: response?.status,
+          error: response?.error,
+          elapsedTime: response?.elapsedTime,
+          responseSize: response?.responseSize,
           testCaseId: testCaseId,
           idempotent_key: idempotent_key,
           run_type: run_type,

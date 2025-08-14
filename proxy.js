@@ -15,6 +15,9 @@ app.use(morgan('dev'));
 // Middleware to parse JSON body
 app.use(express.json());
 
+// Middleware to parse URL-encoded body
+app.use(express.urlencoded({ extended: true }));
+
 // Custom axios instance with interceptors for logging
 const api = axios.create();
 
@@ -56,11 +59,24 @@ app.post('/proxy', async (req, res) => {
     }
 
     try {
+        // Determine the request data format based on content type
+        let requestData = json_body;
+        const contentType = headers['content-type'] || headers['Content-Type'];
+        
+        if (contentType && contentType.includes('application/x-www-form-urlencoded')) {
+            // Convert json_body to URLSearchParams for form data
+            const formData = new URLSearchParams();
+            Object.keys(json_body).forEach(key => {
+                formData.append(key, json_body[key]);
+            });
+            requestData = formData.toString();
+        }
+
         // Forward the request using axios
         const response = await api({
             url: url,
             method,
-            data: json_body,
+            data: requestData,
             headers,
             params: query_params,
         });

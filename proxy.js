@@ -52,7 +52,7 @@ api.interceptors.response.use(
 
 // Proxy route
 app.post('/proxy', async (req, res) => {
-    const { request: { url, method = 'GET', json_body = {}, headers = {}, query_params = {} }, testCaseId, run_type, idempotent_key } = req.body;
+    const { request: { url, method = 'GET', json_body = {}, headers = {}, query_params = {}, xml_body = "" }, testCaseId, run_type, idempotent_key } = req.body;
     
     if (!url) {
         return res.status(400).send({ error: 'url is required' });
@@ -63,7 +63,16 @@ app.post('/proxy', async (req, res) => {
         let requestData = json_body;
         const contentType = headers['content-type'] || headers['Content-Type'];
         
-        if (contentType && contentType.includes('application/x-www-form-urlencoded')) {
+        // Check if XML body should be used
+        const hasXmlContentType = contentType && (
+            contentType.toLowerCase().includes('application/xml') || 
+            contentType.toLowerCase().includes('text/xml')
+        );
+        
+        if (hasXmlContentType && xml_body && xml_body.trim() !== '') {
+            // Use XML body when XML content type is present and xml_body exists
+            requestData = xml_body;
+        } else if (contentType && contentType.includes('application/x-www-form-urlencoded')) {
             // Convert json_body to URLSearchParams for form data
             const formData = new URLSearchParams();
             Object.keys(json_body).forEach(key => {

@@ -3,7 +3,10 @@ const multer = require("multer");
 const app = express();
 const upload = multer(); // In-memory storage
 
-app.post("/upload", upload.any(), (req, res) => {
+app.post("/upload", upload.any(), async (req, res) => {
+  // console.log("Waiting or 20s ......")
+  // await new Promise(res => setTimeout(res, 20000));
+
   console.log("Fields:", req.body); // JSON / string fields
 
   if (req.files) {

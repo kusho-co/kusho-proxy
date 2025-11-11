@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const morgan = require('morgan');
+const FormData = require('form-data');
 
 const app = express();
 const PORT = process.argv.length > 2 ? parseInt(process.argv[2]) : 3000;
@@ -62,13 +63,13 @@ app.post('/proxy', async (req, res) => {
         // Determine the request data format based on content type
         let requestData = json_body;
         const contentType = headers['content-type'] || headers['Content-Type'];
-        
+
         // Check if XML body should be used
         const hasXmlContentType = contentType && (
-            contentType.toLowerCase().includes('application/xml') || 
+            contentType.toLowerCase().includes('application/xml') ||
             contentType.toLowerCase().includes('text/xml')
         );
-        
+
         if (hasXmlContentType && xml_body && xml_body.trim() !== '') {
             // Use XML body when XML content type is present and xml_body exists
             requestData = xml_body;
@@ -79,6 +80,36 @@ app.post('/proxy', async (req, res) => {
                 formData.append(key, json_body[key]);
             });
             requestData = formData.toString();
+        } else if (contentType && contentType.includes('multipart/form-data')) {
+            // Handle multipart/form-data
+            const formData = new FormData();
+
+            // Handle JSON fields
+            if (typeof json_body === "object" && Object.entries(json_body).length > 0) {
+                for (const key in json_body) {
+                    const value = json_body[key];
+                    // If value is object/array, stringify it
+                    if (typeof value === "object") {
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        formData.append(key, value);
+                    }
+                }
+            }
+
+            // Handle XML body as a file part
+            if (typeof xml_body === "string" && xml_body.trim().length > 0) {
+                // Append as a "file" part with content-type application/xml
+                formData.append("file", Buffer.from(xml_body), {
+                    filename: "data.xml",
+                    contentType: "application/xml"
+                });
+            }
+
+            requestData = formData;
+
+            // Update headers with FormData headers (includes boundary)
+            Object.assign(headers, formData.getHeaders());
         }
 
         // Forward the request using axios

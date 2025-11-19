@@ -74,12 +74,23 @@ app.post('/proxy', async (req, res) => {
             // Use XML body when XML content type is present and xml_body exists
             requestData = xml_body;
         } else if (contentType && contentType.includes('application/x-www-form-urlencoded')) {
-            // Convert json_body to URLSearchParams for form data
-            const formData = new URLSearchParams();
-            Object.keys(json_body).forEach(key => {
-                formData.append(key, json_body[key]);
-            });
-            requestData = formData.toString();
+            // If json_body is already a string (e.g. "a=1&b=2"), use it directly
+            if (typeof json_body === 'string') {
+                requestData = json_body;
+            } else {
+                // Convert json_body object to URL-encoded string
+                const formData = new URLSearchParams();
+                Object.keys(json_body).forEach(key => {
+                    // Handle arrays/objects if needed
+                    const value = json_body[key];
+                    if (typeof value === 'object') {
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        formData.append(key, value);
+                    }
+                });
+                requestData = formData.toString();
+            }
         } else if (contentType && contentType.includes('multipart/form-data')) {
             // Handle multipart/form-data
             const formData = new FormData();

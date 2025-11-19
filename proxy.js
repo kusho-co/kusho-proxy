@@ -5,7 +5,12 @@ const morgan = require('morgan');
 const FormData = require('form-data');
 
 const app = express();
-const PORT = process.argv.length > 2 ? parseInt(process.argv[2]) : 3000;
+
+// Parse CLI arguments
+const args = process.argv.slice(2);
+const verbose = args.includes('-v') || args.includes('--verbose');
+const portArg = args.find(arg => !arg.startsWith('-') && !isNaN(parseInt(arg)));
+const PORT = portArg ? parseInt(portArg) : 3000;
 
 // Middleware to enable CORS for all origins
 app.use(cors());
@@ -124,6 +129,15 @@ app.post('/proxy', async (req, res) => {
         }
 
         // Forward the request using axios
+        if (verbose) {
+            console.log("\n******* payload *******\n", {
+                url: url,
+                method,
+                data: requestData,
+                headers,
+                params: query_params,
+            }, "\n******* payload *******\n");
+        }
         const response = await api({
             url: url,
             method,
@@ -131,6 +145,9 @@ app.post('/proxy', async (req, res) => {
             headers,
             params: query_params,
         });
+        if (verbose) {
+            console.log("\n******* response *******\n", response.data, "\n******* response *******\n");
+        }
 
         // Respond with the target server's response
         res.status(200).send({
